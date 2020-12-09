@@ -1,8 +1,13 @@
 from django.db import models
 
-from django.utils import timezone
 from django.contrib.auth.models import User
 from PIL import Image
+
+class Comment(models.Model):
+    post = models.ForeignKey('Post',related_name='comments' ,on_delete=models.CASCADE)
+    comment = models.TextField(max_length=255)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    
 
 class Post(models.Model):
     author = models.ForeignKey(User,related_name='posts',on_delete=models.CASCADE)
