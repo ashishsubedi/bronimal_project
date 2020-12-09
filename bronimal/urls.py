@@ -22,7 +22,8 @@ from posts import views as post_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',post_views.post_list_view,name='index')
+    path('',post_views.post_list_view,name='post-read'),
+    path('post/',post_views.post_create_view,name='post-create'),
 ]
 
 if settings.DEBUG:

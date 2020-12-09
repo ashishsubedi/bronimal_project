@@ -11,14 +11,21 @@ class Post(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='images',null=True,blank=True)
 
-    def save(self):
+    class Meta:
+        ordering = ['-timestamp']
+
+    def save(self,*args,**kwargs):
+        
+        if self.image:
+            img = Image.open(self.image)
+        
+            output_size = (400,400)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
+
+        if not self.image and not self.caption:
+            raise ValueError("Provide either caption or image")
+        
         super().save()
-
-        img = Image.open(self.image.path)
-    
-        output_size = (400,400)
-        img.thumbnail(output_size)
-        img.save(self.image.path)
-
     
 
