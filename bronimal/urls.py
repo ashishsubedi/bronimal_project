@@ -18,9 +18,11 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
+from posts import views as post_views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/', include('bronimal_site.urls')),
+    path('',post_views.post_list_view,name='index')
 ]
 
 if settings.DEBUG:
