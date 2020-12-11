@@ -2,7 +2,9 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import Post
-from .serializers import PostSerializer, PostCreateSerializer
+from .serializers import (PostSerializer, PostCreateSerializer,PostDetailSerializer)
+
+from rest_framework.generics import (RetrieveAPIView)
 
 @api_view(['GET'])
 def post_list_view(request):
@@ -30,7 +32,11 @@ def post_detail_view(request,post_id):
     serializer = PostSerializer(post,many=True)
 
     return Response(serializer.data,status=200)
-
+    
+class PostDetailView(RetrieveAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostDetailSerializer
+    lookup_url_kwarg = 'post_id'
 
 @api_view(['DELETE','POST'])
 def post_delete_view(request,post_id):

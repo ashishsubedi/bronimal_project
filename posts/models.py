@@ -13,19 +13,26 @@ class Comment(models.Model):
         ordering = ['-timestamp']
 
 class Like(models.Model):
-    post = models.ForeignKey('Post',on_delete=models.CASCADE)
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    post = models.ForeignKey('Post',related_name='likes',on_delete=models.CASCADE)
+    user = models.ForeignKey(User,related_name='likes',on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         ordering = ['-timestamp']
 
+    def save(self,*args,**kwargs):
+        qs = Like.objects.filter(user=self.user,post=self.post)
+
+        if qs.exists():
+            qs.delete()
+        else:
+            super().save()
+        
 
 class Post(models.Model):
     author = models.ForeignKey(User,related_name='posts',on_delete=models.CASCADE)
     caption = models.TextField(blank=True,max_length=255)
     image = models.ImageField(upload_to='images',blank=True)
-   
-    likes = models.ManyToManyField(User,related_name='likes',blank=True, through=Like)
    
     timestamp = models.DateTimeField(auto_now_add=True)
     class Meta:
@@ -44,7 +51,7 @@ class Post(models.Model):
             raise ValueError("Provide either caption or image")
         
         super().save()
-    
+
     
     
 

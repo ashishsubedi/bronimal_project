@@ -16,16 +16,55 @@ class PostCreateSerializer(serializers.ModelSerializer):
         model = Post
         fields = ['id','caption','timestamp','image']
 
-    def get_likes(self,obj):
-        return obj.likes.count()
 
 class PostSerializer(serializers.ModelSerializer):
+    likes_count = serializers.SerializerMethodField(read_only=True)
+    comments_count = serializers.SerializerMethodField(read_only=True)
+    
+    comments = serializers.SerializerMethodField(read_only=True)
     likes = serializers.SerializerMethodField(read_only=True)
-    comments = CommentSerializer(many=True,read_only=True)
+
+    
     class Meta:
         model = Post
-        fields = ['id','author','caption','likes','timestamp','image','comments']
+        fields = ['id','author','caption','image','likes','comments','likes_count','comments_count','timestamp']
+
+    def get_likes_count(self,obj):
+        return obj.likes.count()
+
+    def get_comments_count(self,obj):
+        return obj.comments.count()
+
+    def get_comments(self,obj):
+        qs = obj.comments.filter()[:3]
+        serialize = CommentSerializer(qs,many=True)
+        return serialize.data
 
     def get_likes(self,obj):
+        qs = obj.likes.filter()[:3]
+        serialize = LikeSerializer(qs,many=True)
+        return serialize.data
+
+
+
+   
+class PostDetailSerializer(serializers.ModelSerializer):
+    likes_count = serializers.SerializerMethodField(read_only=True)
+    likes = LikeSerializer(many=True,read_only=True)
+
+    comments = CommentSerializer(many=True,read_only=True)
+    comments_count = serializers.SerializerMethodField(read_only=True)
+
+    
+    class Meta:
+        model = Post
+        fields = ['id','author','caption','image','likes','comments','likes_count','comments_count','timestamp']
+
+    def get_likes_count(self,obj):
         return obj.likes.count()
+
+    def get_comments_count(self,obj):
+        return obj.comments.count()
+
+    
     
