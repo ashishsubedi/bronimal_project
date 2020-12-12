@@ -139,10 +139,16 @@ class CommentDeleteView(DestroyAPIView):
 #For likes
 
 class LikeListView(ListAPIView):
-    queryset = Like.objects.all()
     serializer_class = LikeSerializer
-    lookup_url_kwarg = 'post_id'
+    # lookup_url_kwarg = 'post_id'
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        post_id = self.kwargs.get('post_id')
+        post = Post.objects.get(id = post_id)
+        return post.likes.all()
+
+
 
 
     
@@ -150,6 +156,7 @@ class LikeListView(ListAPIView):
 @permission_classes([IsAuthenticated,IsOwnerOrReadOnly])
 def like_toggle_view(request,post_id):
     post = Post.objects.filter(id=post_id)
+    print(post)
     if not post.exists():
         return Response({"message":"Post doesn't exist"},status=404)
 
