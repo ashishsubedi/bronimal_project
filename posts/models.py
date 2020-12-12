@@ -30,7 +30,7 @@ class Like(models.Model):
         
 
 class Post(models.Model):
-    author = models.ForeignKey(User,related_name='posts',on_delete=models.CASCADE)
+    user = models.ForeignKey(User,related_name='posts',on_delete=models.CASCADE)
     caption = models.TextField(blank=True,max_length=255)
     image = models.ImageField(upload_to='images',blank=True)
    
