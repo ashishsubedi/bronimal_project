@@ -19,10 +19,12 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from posts import views as post_views
+from users import views as user_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/posts/',include('posts.urls')),
+    path('api/users/',include('users.urls')),
 ]
 
 if settings.DEBUG:

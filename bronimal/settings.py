@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     #Internal
     'posts.apps.PostsConfig',
+    'users'
 
 ]
 
@@ -142,3 +143,5 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
     'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework.authentication.SessionAuthentication']
 }
+
+AUTH_USER_MODEL = 'users.User'
