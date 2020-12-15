@@ -9,8 +9,8 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
             return True
 
         # Instance must have an attribute named `user`.
-        user = obj.user
-        return user == request.user
+       
+        return obj == request.user
 
 
 class BlocklistPermission(permissions.BasePermission):

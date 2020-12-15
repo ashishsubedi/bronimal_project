@@ -54,30 +54,14 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 class UserUpdateSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=150,read_only=True)
-    password = serializers.CharField(write_only=True)
-    
 
     class Meta:
         model = User
-        fields= ['username','email','first_name','last_name','password']
-        
-    def validate_password(self,password):
-        
-        if not self.initial_data.get('password') :
-            raise serializers.ValidationError("Please enter a password and "
-                "confirm it.")
-        try:
-            print(self.initial_data)
-            print(self)
-            validators.validate_password(password,user=None)
-        except validators.ValidationError as e:
-            raise serializers.ValidationError(e.messages)
-        return password
-
+        fields= ['username','email','first_name','last_name',]
+    
     def update(self,instance,validated_data):
-        print(validated_data)
-        user = User.objects.get(username=validated_data['username'])
-
-        
-        user.save()
-        return user
+        instance.email = validated_data.get('email',instance.email)
+        instance.first_name = validated_data.get('first_name',instance.first_name)
+        instance.last_name = validated_data.get('last_name',instance.last_name)
+        instance.save()
+        return instance

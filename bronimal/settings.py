@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     #3rd party
     'rest_framework',
+    'rest_framework.authtoken',
     #Internal
     'posts.apps.PostsConfig',
     'users'
@@ -134,14 +135,15 @@ DEFAULT_RENDERER_CLASSES = [
         'rest_framework.renderers.JSONRenderer',
     ]
 
-if DEBUG:
-    DEFAULT_RENDERER_CLASSES += [
-        'rest_framework.renderers.BrowsableAPIRenderer',
-    ]
+# if DEBUG:
+#     DEFAULT_RENDERER_CLASSES += [
+#         'rest_framework.renderers.BrowsableAPIRenderer',
+#     ]
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
-    'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework.authentication.SessionAuthentication']
+    'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework.authentication.TokenAuthentication']
+    # 'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework.authentication.SessionAuthentication']
 }
 
 AUTH_USER_MODEL = 'users.User'

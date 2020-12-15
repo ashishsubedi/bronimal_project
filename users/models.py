@@ -5,6 +5,7 @@ class User(AbstractUser):
     email = models.EmailField(blank=False,unique=True)
     REQUIRED_FIELDS = ['first_name','email','last_name']
 
+
 class Profile(models.Model):
     user = models.OneToOneField(User,related_name='profile',on_delete=models.CASCADE)
 
