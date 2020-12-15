@@ -123,6 +123,7 @@ USE_L10N = True
 USE_TZ = True
 
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
@@ -142,8 +143,9 @@ DEFAULT_RENDERER_CLASSES = [
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
-    'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework.authentication.TokenAuthentication']
-    # 'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework.authentication.SessionAuthentication']
+    'DEFAULT_AUTHENTICATION_CLASSES':['rest_framework.authentication.TokenAuthentication'],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 1
 }
 
 AUTH_USER_MODEL = 'users.User'

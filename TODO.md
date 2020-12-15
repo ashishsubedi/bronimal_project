@@ -7,10 +7,10 @@ Sample Description, this is.
 - [x] CRUD Comments
 - [x] Toggle Like
 - [x] View Likes
-- [ ] Search
-- [W] Add image to Posts
-
-  
+- [x] Add image to Posts
+- [x] Search
+- [x] Pagination
+- [x] View Posts of user
 
 
 ### Users
@@ -18,7 +18,7 @@ Sample Description, this is.
 - [x] CRUD  
 - [x] Token Authentication
 - [x] Profile CRUD
-- [ ] Search
+- [x] Search
 
 ### Relationships
 

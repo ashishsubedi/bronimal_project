@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework import filters
 from .models import Post, Comment, Like
 from .serializers import (
     PostSerializer,
@@ -33,9 +34,18 @@ from rest_framework.generics import (
 @permission_classes([IsAuthenticated])
 def post_list_view(request):
     posts = Post.objects.all()
+    
     serializer = PostSerializer(posts,many=True)
 
     return Response(serializer.data,status=200)
+
+class PostListView(ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['user__username','caption']
+    ordering_fields = ['-timestamp']
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated,IsOwnerOrReadOnly])
@@ -93,6 +103,21 @@ def post_delete_view(request,post_id):
     post = post.first()
     post.delete()
     return Response({'message':"Deleted Post"},status=204)
+
+# All posts of certain user
+class UserPostListView(ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter]
+    search_fields = ['user__username','caption']
+    ordering_fields = ['-timestamp']
+
+    def list(self,*args,**kwargs):
+
+        qs = Post.objects.filter(user__username=self.kwargs['username'])
+        serializer = PostSerializer(qs,many=True)
+        return Response(serializer.data)
 
 # For Comments
 

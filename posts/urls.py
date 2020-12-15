@@ -10,20 +10,24 @@ from .views import (
     comment_create_view,
     like_toggle_view,
 
+    PostListView,
     PostDetailView,
     CommentListView,
     LikeListView,
     PostUpdateView,
     PostDeleteView,
     CommentUpdateView,
-    CommentDeleteView
+    CommentDeleteView,
+    UserPostListView
 
 )
 
 urlpatterns = [
 
-    path('',post_list_view,name='post-read'),
+    # path('',post_list_view,name='post-list'),
+    path('',PostListView.as_view(),name='post-list'),
     path('create/',post_create_view,name='post-create'),
+    path('<str:username>/',UserPostListView.as_view(),name='post-user-view'),
     # path('<int:post_id>/',post_detail_view,name='post-detail'),
     path('<int:post_id>/',PostDetailView.as_view(),name='post-detail'),
     path('<int:post_id>/update/',PostUpdateView.as_view(),name='post-update'),
