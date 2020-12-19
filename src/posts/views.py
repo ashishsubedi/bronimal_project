@@ -75,7 +75,7 @@ class PostDeleteView(RetrieveDestroyAPIView):
 @permission_classes([IsAuthenticated])
 def post_detail_view(request,post_id):
     post = Post.objects.filter(id=post_id)
-
+    print(post)
     if not post.exists():
         return Response({"message":"Post doesn't exist"},status=404)
     print(post.values())
