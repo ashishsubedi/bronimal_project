@@ -20,7 +20,9 @@ class CommentSerializer(serializers.ModelSerializer):
     def get_user_profile_url(self,obj):
         return reverse('user-profile-detail', args=(obj.user.username,))
     def get_user_avatar(self,obj):
-        return obj.user.profile.avatar.url
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.user.profile.avatar.url)
+
 
 class LikeSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField(read_only=True)
@@ -36,7 +38,10 @@ class LikeSerializer(serializers.ModelSerializer):
     def get_user_profile_url(self,obj):
         return reverse('user-profile-detail', args=(obj.user.username,))
     def get_user_avatar(self,obj):
-        return obj.user.profile.avatar.url
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.user.profile.avatar.url)
+
+
 
 class PostCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -69,7 +74,9 @@ class PostSerializer(serializers.ModelSerializer):
     def get_user_profile_url(self,obj):
         return reverse('user-profile-detail', args=(obj.user.username,))
     def get_user_avatar(self,obj):
-        return obj.user.profile.avatar.url
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.user.profile.avatar.url)
+
 
     def get_post_url(self,obj):
         return reverse('post-detail',args=(obj.pk,))
@@ -82,12 +89,12 @@ class PostSerializer(serializers.ModelSerializer):
 
     def get_comments(self,obj):
         qs = obj.comments.filter()[:3]
-        serialize = CommentSerializer(qs,many=True)
+        serialize = CommentSerializer(qs,many=True,context={'request': self.context.get('request')})
         return serialize.data
 
     def get_likes(self,obj):
         qs = obj.likes.filter()[:3]
-        serialize = LikeSerializer(qs,many=True)
+        serialize = LikeSerializer(qs,many=True,context={'request': self.context.get('request')})
         return serialize.data
 
 
@@ -119,7 +126,9 @@ class PostDetailSerializer(serializers.ModelSerializer):
         return reverse('user-profile-detail', args=(obj.user.username,))
     
     def get_user_avatar(self,obj):
-        return obj.user.profile.avatar.url
+        request = self.context.get('request')
+        return request.build_absolute_uri(obj.user.profile.avatar.url)
+
 
     def get_post_url(self,obj):
         return reverse('post-detail',args=(obj.pk,))

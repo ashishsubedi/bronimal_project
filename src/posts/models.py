@@ -1,8 +1,10 @@
 from django.db import models
+from os.path import join
 
 # from django.contrib.auth.models import User
 from users.models import User
 from PIL import Image
+
 
 class Comment(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -33,25 +35,26 @@ class Like(models.Model):
 class Post(models.Model):
     user = models.ForeignKey(User,related_name='posts',on_delete=models.CASCADE)
     caption = models.TextField(blank=True,max_length=255)
-    image = models.ImageField(upload_to='images')
+    image = models.ImageField(upload_to='images/')
    
     timestamp = models.DateTimeField(auto_now_add=True)
     class Meta:
         ordering = ['-timestamp']
 
     def save(self,*args,**kwargs):
-        
-        if self.image:
-            img = Image.open(self.image)
-        
-            output_size = (400,400)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
 
         if not self.image and not self.caption:
             raise ValueError("Provide either caption or image")
         
         super().save()
+        if self.image:
+
+            img = Image.open(self.image)
+        
+            output_size = (400,400)
+            img.thumbnail(output_size)
+            # print(self.image,self.image.path)
+            img.save(self.image.path)
 
     
     
